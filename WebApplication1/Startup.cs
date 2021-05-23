@@ -27,6 +27,11 @@ namespace WebApplication1
     {
         public void Apply ( OpenApiOperation operation, OperationFilterContext context )
         {
+            if (context.ApiDescription.SupportedResponseTypes.Count == 0)
+            {
+                return;
+            }
+
             //eg. IEnumerable<WeatherForecast>
             var responseType = context.ApiDescription.SupportedResponseTypes[0].Type;
 
