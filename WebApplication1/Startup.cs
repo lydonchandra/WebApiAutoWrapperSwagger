@@ -27,9 +27,13 @@ namespace WebApplication1
     {
         public void Apply ( OpenApiOperation operation, OperationFilterContext context )
         {
+            //eg. IEnumerable<WeatherForecast>
             var responseType = context.ApiDescription.SupportedResponseTypes[0].Type;
+
+            //eg. AutoWrapper<IEnumerable<WeatherForecast>>
             var wrappedResponseType = typeof( AutoWrapperDefinition<> ).MakeGenericType( responseType );
 
+            //new schema, TODO is to check if schema exists
             var schema = context.SchemaGenerator.GenerateSchema(
                 wrappedResponseType,
                 context.SchemaRepository
@@ -47,6 +51,7 @@ namespace WebApplication1
             };
             operation.Responses.Clear();
             operation.Responses.Add( "200", openApiResponse );
+            //TODO: add Response for other status code
         }
     }
         
@@ -68,9 +73,6 @@ namespace WebApplication1
             services.AddSwaggerGen( c =>
              {
                  c.OperationFilter<ResponseWrapperOperationFilter>();
-
-                 //c.DocumentFilter<CustomModelDocumentFilter<ResponseWrapper2>>();
-
                  c.SwaggerDoc( "v1", new OpenApiInfo { Title = "WebApplication1", Version = "v1" } );
              } );
         }
