@@ -8,32 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplication1.Controllers;
 
-//[assembly: ApiConventionType( typeof( MyAppConventions ) )]
 namespace WebApplication1.Controllers
 {
-    public static class MyAppConventions
-    {
-        [ProducesResponseType( 200, Type = typeof( ResponseWrapper<IEnumerable<WeatherForecast>> ) )]
-        [ApiConventionNameMatch(ApiConventionNameMatchBehavior.Any)]
-        public static void Get ()
-        {
-        }
-    }
-
-    public class ResponseWrapper<T>
-    {
-        public string Message { get; set; }
-
-        public T Result { get; set; }
-    }
-
-    public class ResponseWrapper2
-    {
-        public string Message { get; set; }
-
-        public string Result { get; set; }
-    }
-
     [ApiController]
     [Route( "[controller]" )]    
     public class WeatherForecastController : ControllerBase
@@ -51,7 +27,6 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        //[ProducesResponseType( 200, Type = typeof( ResponseWrapper<IEnumerable<WeatherForecast>> ) )]
         public IEnumerable<WeatherForecast> Get ()
         {
             var rng = new Random();

@@ -17,21 +17,18 @@ using WebApplication1.Controllers;
 
 namespace WebApplication1
 {
-    public class CustomModelDocumentFilter<T> : IDocumentFilter where T : class
+    public class AutoWrapperDefinition<T>
     {
-        public void Apply ( OpenApiDocument openapiDoc, DocumentFilterContext context )
-        {            
-            context.SchemaGenerator.GenerateSchema( typeof( T ), context.SchemaRepository );
-        }
+        public string Message { get; set; }
+        public T Result { get; set; }
     }
-
 
     public class ResponseWrapperOperationFilter : IOperationFilter
     {
         public void Apply ( OpenApiOperation operation, OperationFilterContext context )
         {
             var responseType = context.ApiDescription.SupportedResponseTypes[0].Type;
-            var wrappedResponseType = typeof( ResponseWrapper<> ).MakeGenericType( responseType );
+            var wrappedResponseType = typeof( AutoWrapperDefinition<> ).MakeGenericType( responseType );
 
             var schema = context.SchemaGenerator.GenerateSchema(
                 wrappedResponseType,
@@ -52,18 +49,6 @@ namespace WebApplication1
             operation.Responses.Add( "200", openApiResponse );
         }
     }
-
-            //Schema = new OpenApiSchema()
-            //{
-            //    Reference = new OpenApiReference
-            //    {
-            //        Type = ReferenceType.Schema,
-            //        Id = wrappedReturnType.Name
-            //    }
-            //}
-            //(new System.Collections.Generic.ICollectionDebugView<Microsoft.AspNetCore.Mvc.ApiExplorer.ApiResponseType>( context.ApiDescription.SupportedResponseTypes ).Items[0]).Type
-
-
         
     
     public class Startup
